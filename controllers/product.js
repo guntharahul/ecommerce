@@ -99,29 +99,34 @@ exports.update = (req, res) => {
         error: 'Image could not be uploaded',
       });
     }
-    const { name, description, price, category, quantity, shipping } = fields;
-    if (
-      // validating the incoming form fields of the update request and checking if they are empty
-      !name ||
-      !description ||
-      !price ||
-      !category ||
-      !quantity ||
-      !shipping
-    ) {
-      return res.status(400).json({
-        error: 'All fields are required',
-      });
-    }
+
+    // Commented the below lines as we do not need admin to update all the fields when updating a product
+    // const { name, description, price, category, quantity, shipping } = fields;
+
+    // validating the incoming form fields of the update request and checking if they are empty
+    // if (
+    //   !name ||
+    //   !description ||
+    //   !price ||
+    //   !category ||
+    //   !quantity ||
+    //   !shipping
+    // ) {
+    //   return res.status(400).json({
+    //     error: 'All fields are required',
+    //   });
+    // }
+
     let product = req.product; // getting the details of the existing product using productById from params function
     product = _.extend(product, fields); // updating the product with the existing fields of the new incoming form
+
     if (files.photo) {
       if (files.photo.size > 1000000) {
         return res.status(400).json({
           error: 'Image size should be less than 1mb',
         });
       }
-      console.log(files.photo);
+      // console.log(files.photo);
       product.photo.data = fs.readFileSync(files.photo.path);
       product.photo.contentType = files.photo.type;
     }
